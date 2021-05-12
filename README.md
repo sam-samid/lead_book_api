@@ -78,6 +78,19 @@ Sample Usage:
     });
 
   * LOGIN
+    var settings = {
+      "url": "http://local.leadbook.devel:8081/users/login",
+      "method": "POST",
+      "timeout": 0,
+      "processData": false,
+      "mimeType": "multipart/form-data",
+      "contentType": false,
+      "data": form
+    };
+
+    $.ajax(settings).done(function (response) {
+      console.log(response);
+    });
 
   * EMAIL VERIFYING
     var form = new FormData();
@@ -109,6 +122,9 @@ Sample Usage:
       "url": "http://local.leadbook.devel:8081/user/20/password/reset",
       "method": "POST",
       "timeout": 0,
+      "headers": {
+        "Authorization": "Bearer 4AKuvFnsApPqybYSKOvddD8W+A=="
+      },
       "processData": false,
       "mimeType": "multipart/form-data",
       "contentType": false,
@@ -124,6 +140,9 @@ Sample Usage:
       "url": "http://local.leadbook.devel:8081/companies/tech/find",
       "method": "GET",
       "timeout": 0,
+      "headers": {
+        "Authorization": "Bearer 4AKuvFnsApPqybYSKOvddD8W+A=="
+      },
       "processData": false,
       "mimeType": "multipart/form-data",
       "contentType": false,
@@ -139,6 +158,9 @@ Sample Usage:
       "url": "http://local.leadbook.devel:8081/favouritecompanies/20users/2/companies/favourite",
       "method": "POST",
       "timeout": 0,
+      "headers": {
+        "Authorization": "Bearer 4AKuvFnsApPqybYSKOvddD8W+A=="
+      },
       "processData": false,
       "mimeType": "multipart/form-data",
       "contentType": false,
@@ -154,6 +176,9 @@ Sample Usage:
       "url": "http://local.leadbook.devel:8081/favouritecompanies/3/unfavourite",
       "method": "POST",
       "timeout": 0,
+      "headers": {
+        "Authorization": "Bearer 4AKuvFnsApPqybYSKOvddD8W+A=="
+      },
       "processData": false,
       "mimeType": "multipart/form-data",
       "contentType": false,
@@ -169,6 +194,9 @@ Sample Usage:
       "url": "http://local.leadbook.devel:8081/favouritecompanies/20/find",
       "method": "GET",
       "timeout": 0,
+      "headers": {
+        "Authorization": "Bearer 4AKuvFnsApPqybYSKOvddD8W+A=="
+      },
       "processData": false,
       "mimeType": "multipart/form-data",
       "contentType": false,
