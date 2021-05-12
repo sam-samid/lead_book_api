@@ -1,0 +1,135 @@
+{% extends 'base-header.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card">
+                    <header class="card-header">
+                        <h4 class="card-title mt-2">Company</h4>
+                            <div id="alert">
+            
+                            </div>
+                    </header>
+                        <article class="card-body">
+                            <form id="search_box">
+                                <div class="row">
+                                    <div class="col-auto">
+                                        <label for="inputPassword2" class="visually-hidden">company name</label>
+                                        <input type="text" class="form-control" id="company_name" placeholder="Company Name">
+                                    </div>
+                                    <div class="col-auto">
+                                        <button type="submit" class="btn btn-primary mb-3">search</button>
+                                    </div>
+                                </div>
+                            </form>
+                            <table class="table table-hover" id="table_company">
+                                <thead>
+                                    <th>Name</th>
+                                    <th>Address</th>
+                                    <th>Phone Number</th>
+                                    <th>Add To Favourite</th>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </article> <!-- card-body end .// -->
+                </div> <!-- card.// -->
+            </div> <!-- col.//-->
+
+        </div> <!-- row.//--></div>
+                    
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        var init = $(function() {
+            console.log(url);
+
+            getCompany('all');
+
+            $( "#company_name" ).keyup(function() {
+                var searchName = $('#company_name').val();
+                if (searchName =='') {
+                    searchName = 'all';
+                }
+
+                getCompany(searchName);
+            });
+
+        });
+
+        var getCompany = function(searchName) {
+            var settings = {
+                "url": url+"/companies/"+searchName+"/find",
+                "method": "GET",
+                "timeout": 0,
+                "headers": {
+                    "Authorization": "Bearer "+users.token
+                },
+            };
+            
+            $.ajax(settings).done(function (response) {
+                var rows = "";
+
+                $.each(response.data.data, function(i, data) {
+                    rows += '<tr>';
+                    rows += '<td>';
+                    rows += data.name;
+                    rows += '</td>';
+                    rows += '<td>';
+                    rows += data.address;
+                    rows += '</td>';
+                    rows += '<td>';
+                    rows += data.phone_number;
+                    rows += '</td>';
+                    rows += '<td>';
+                    rows += '<button class="add_to_favourite" data-company-id='+data.id+' type="button" class="btn btn-default btn-lg"><span class="glyphicon glyphicon-star" aria-hidden="true"></span> Star</button>';
+                    rows += '</td>';
+                    rows += '</tr>';
+                });
+
+                $('#table_company tbody').html(rows);
+
+                $('.add_to_favourite').click(function (e) { 
+                    e.preventDefault();
+                    var companyId = $(this).attr('data-company-id');
+                    saveCompanyAsFavourite(users.id,companyId);
+                });
+
+            }).fail(function (data, status, xhr) {
+                var rows = "";
+                rows += '<tr>';
+                rows += '<td colspan=4>';
+                rows += data.statusText;
+                rows += '</td>';
+                rows += '</tr>';
+                $('#table_company tbody').html(rows);
+            });;
+        }
+
+        var saveCompanyAsFavourite = function(userId, companyId) {
+            var settings = {
+                "url": url+"/favouritecompanies/"+userId+"/users/"+companyId+"/companies/favourite",
+                "method": "POST",
+                "timeout": 0,
+                "headers": {
+                    "Authorization": "Bearer "+users.token
+                },
+            };
+            
+            $.ajax(settings).done(function (response) {
+                var html = '<div class="alert alert-success" role="alert"><p>'+response.message+'</p></div>';
+                $('#alert').html(html);
+            }).fail(function (data, status, xhr) {
+                var obj = JSON.parse(data.responseText);
+                var html = '<div class="alert alert-danger" role="alert"><p>'+obj.message+'</p></div>';
+                $('#alert').html(html);
+            });
+        }
+    
+    </script>
+
+{% endblock %}

@@ -33,11 +33,15 @@ class CompanyController extends DefaultController
         
         $em = $this->getDoctrine()->getManager();
         
+        if($companyName == 'all'){
+            $companyName = '';
+        }
+
         $companies = $em->getRepository(self::COMPANY_REPO)->getCompanyByName($companyName);
         $collection = new Collection($companies, new CompanyTransformer);
         $companies = $this->manager->createData($collection)->toArray();
-        
-        if($companies){
+
+        if($companies['data']){
             $data = [
                 'code' => 200,
                 'status' => 'success',
@@ -46,8 +50,8 @@ class CompanyController extends DefaultController
         }else{
             $data = [
                 'code' => 404,
-                'status' => 'success',
-                'message' => 'email verifying has been sent to your email'
+                'status' => 'error',
+                'message' => 'data not found'
             ];
         }   
 

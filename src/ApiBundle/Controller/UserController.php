@@ -167,7 +167,7 @@ class UserController extends DefaultController
 
     /**
      * login
-     * @Rest\Post("/users/login", name="user_login")
+     * @Rest\Post("/users/login", name="api_user_login")
      * @param Request $request
      * @return View
      */
@@ -186,7 +186,12 @@ class UserController extends DefaultController
             $data = [
                 'code' => 200,
                 'status' => 'success',
-                'token' => $existUser->getToken()
+                'data' => [
+                    'userId'=>$existUser->getId(),
+                    'username'=>$existUser->getUsername(),
+                    'email'=>$existUser->getEmail(),
+                    'token'=>$existUser->getToken()
+                ]
             ]; 
         }else{
             $data = [

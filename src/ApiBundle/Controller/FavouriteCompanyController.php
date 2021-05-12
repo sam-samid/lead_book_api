@@ -48,8 +48,8 @@ class FavouriteCompanyController extends DefaultController
         }else{
             $data = [
                 'code' => 404,
-                'status' => 'success',
-                'message' => 'email verifying has been sent to your email'
+                'status' => 'error',
+                'message' => 'not found'
             ];
         }   
 
@@ -58,7 +58,7 @@ class FavouriteCompanyController extends DefaultController
 
     /**
      * mark Company as favourite
-     * @Rest\Post("/favouritecompanies/{userId}users/{companyId}/companies/favourite", name="api_set_favourite_company")
+     * @Rest\Post("/favouritecompanies/{userId}/users/{companyId}/companies/favourite", name="api_set_favourite_company")
      * @param Request $request
      * @return View
      */
@@ -77,19 +77,29 @@ class FavouriteCompanyController extends DefaultController
 
         $user = $em->getRepository(self::USER_REPO)->find($userId);
         $company = $em->getRepository(self::COMPANY_REPO)->find($companyId);
-        
-        $favouriteCompany = new FavouriteCompany();
-        $favouriteCompany->setUser($user);
-        $favouriteCompany->setCompany($company);
-        $favouriteCompany->setCreatedAt(new \DateTime());
-        $em->persist($favouriteCompany);
-        $em->flush();
 
-        $data = [
-            'code' => 200,
-            'status' => 'success',
-            'message' => 'company has added to favourite table'
-        ];
+        $favouriteCompany = $em->getRepository(self::FAVOURITE_COMPANY_REPO)->findOneBy(['userId'=>$userId, 'companyId'=>$companyId, 'deletedAt'=>Null]);
+        if ($favouriteCompany) {
+            $data = [
+                'code' => 400,
+                'status' => 'error',
+                'message' => 'already add as favourite'
+            ];
+        }else{
+            $favouriteCompany = new FavouriteCompany();
+            $favouriteCompany->setUser($user);
+            $favouriteCompany->setCompany($company);
+            $favouriteCompany->setCreatedAt(new \DateTime());
+            $em->persist($favouriteCompany);
+            $em->flush();
+    
+            $data = [
+                'code' => 200,
+                'status' => 'success',
+                'message' => 'company has added to favourite table'
+            ];
+        }
+
 
         return $this->generateResponseData($data);
     }
@@ -122,7 +132,7 @@ class FavouriteCompanyController extends DefaultController
         $data = [
             'code' => 200,
             'status' => 'success',
-            'message' => 'company has added to favourite table'
+            'message' => 'company has removed from favourite table'
         ];
 
         return $this->generateResponseData($data);

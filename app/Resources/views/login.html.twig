@@ -6,7 +6,7 @@
             <div class="col-md-6">
                 <div class="card">
                     <header class="card-header">
-                        <h4 class="card-title mt-2">Register</h4>
+                        <h4 class="card-title mt-2">Login</h4>
                             <div id="alert">
             
                             </div>
@@ -21,20 +21,12 @@
                                     <label for="password" class="form-label">Password</label>
                                     <input type="password" class="form-control" id="password" placeholder="password">
                                 </div>
-                                <div class="mb-3">
-                                    <label for="email" class="form-label">Email</label>
-                                    <input type="text" class="form-control" id="email" placeholder="email">
-                                </div>
-                                <div class="mb-3">
-                                    <label for="phone_number" class="form-label">Phone Number</label>
-                                    <input type="text" class="form-control" id="phone_number" placeholder="+62234234324">
-                                </div>
                                 <div class="col-12">
-                                    <button type="submit" class="btn btn-primary">Register</button>
+                                    <button type="submit" class="btn btn-primary">Login</button>
                                 </div>
                             </form>
                         </article> <!-- card-body end .// -->
-                        <div class="border-top card-body text-center">Have an account? <a href="{{ path('user_login') }}">Log In</a></div>
+                        <div class="border-top card-body text-center">Don't have an account? <a href="{{ path('user_register') }}">Register</a></div>
                 </div> <!-- card.// -->
             </div> <!-- col.//-->
 
@@ -52,26 +44,18 @@
                     var form = new FormData();
                     var username = $('#username').val();
                     var password = $('#password').val();
-                    var phone_number = $('#phone_number').val();
-                    var email = $('#email').val();
                     form.append("username", username);
                     form.append("password", password);
-                    form.append("phone_number", phone_number);
-                    form.append("email", email); 
-
-                    sendPostRegisterData(form);
+                    sendPostLoginData(form);
 
             });
         });
 
-        var sendPostRegisterData = function(form) {
+        var sendPostLoginData = function(form) {
             var settings = {
-                "url": url+"/users/register",
+                "url": url+"/users/login",
                 "method": "POST",
                 "timeout": 0,
-                "headers": {
-                    "Authorization": "Bearer 4AKuvFnsApPqybYSKOvcej8Q/g=="
-                },
                 "processData": false,
                 "mimeType": "multipart/form-data",
                 "contentType": false,
@@ -80,8 +64,16 @@
 
             $.ajax(settings).done(function (response) {
                 var obj = JSON.parse(response);
-                var html = '<div class="alert alert-success" role="alert"><p>'+obj.message+'</p></div>';
-                $('#alert').html(html);
+                var obj = {
+                    userId: obj.data.userId,
+                    username: obj.data.username,
+                    email: obj.data.email,
+                    token: obj.data.token
+                };
+                
+                localStorage.setItem('userStorage', JSON.stringify(obj));
+
+                window.location.href = 'http://local.leadbook.devel:8081/company';
             }).fail(function (data, status, xhr) {
                 var obj = JSON.parse(data.responseText);
                 var html = '<div class="alert alert-danger" role="alert"><p>'+obj.message+'</p></div>';

@@ -14,7 +14,7 @@ class FavouriteCompanyTransformer extends TransformerAbstract
 	public function transform(FavouriteCompany $favouriteCompany)
 	{
         return [
-            'id' => $favouriteCompany->getCompany()->getId(),
+            'id' => $favouriteCompany->getId(),
             'name' => $favouriteCompany->getCompany()->getName(),
             'address' => $favouriteCompany->getCompany()->getAddress(),
             'phone_number' => $favouriteCompany->getCompany()->getPhoneNumber()

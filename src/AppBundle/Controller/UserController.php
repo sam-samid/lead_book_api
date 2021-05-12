@@ -2,24 +2,40 @@
 
 namespace AppBundle\Controller;
 
-use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Entity\User;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 /**
  * Class UserController
  */
-class UserController extends DefaultController
+class UserController extends Controller
 {
-    const USER_REPO = 'AppBundle:User';
-
     /**
-     * @Route("/register", name="user_register")
+     * @Route("/registers", name="user_register")
     */
-    public function registerUser(Request $request)
+    public function registerUser()
     {
         return $this->render(
             "register.html.twig"
+        );
+    }
+
+    /**
+     * @Route("/login", name="user_login")
+    */
+    public function loginUser()
+    {
+        return $this->render(
+            "login.html.twig"
+        );
+    }
+
+    /**
+     * @Route("/reset", name="reset_password")
+    */
+    public function resetPassword()
+    {
+        return $this->render(
+            "reset_password.html.twig"
         );
     }
 
