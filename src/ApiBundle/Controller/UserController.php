@@ -21,7 +21,6 @@ class UserController extends DefaultController
     public function registerUser(Request $request)
     {
         $postdata = $request->request->all();
-        
         $em = $this->getDoctrine()->getManager();
         
         $existUser = $em->getRepository(self::USER_REPO)->findOneBy(['username'=>$postdata['username']]);
