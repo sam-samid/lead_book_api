@@ -57,6 +57,13 @@ class User
     private $emailVerified;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="token", type="string", length=100, nullable=false)
+     */
+    private $token;
+
+    /**
      * @var \DateTime
      * @ORM\Column(name="deleted_at", type="datetime", nullable=true)
      */
@@ -273,6 +280,30 @@ class User
     public function setEmailVerified(bool $emailVerified)
     {
         $this->emailVerified = $emailVerified;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of token
+     *
+     * @return  string
+     */ 
+    public function getToken()
+    {
+        return $this->token;
+    }
+
+    /**
+     * Set the value of token
+     *
+     * @param  string  $token
+     *
+     * @return  self
+     */ 
+    public function setToken(string $token)
+    {
+        $this->token = $token;
 
         return $this;
     }

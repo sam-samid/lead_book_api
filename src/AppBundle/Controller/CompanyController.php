@@ -22,6 +22,15 @@ class CompanyController extends DefaultController
      */
     public function findCompanyByName(Request $request, $companyName)
     {
+        if(!$this->getAuthorization()){
+            $data = [
+                'code' => 400,
+                'status' => 'error',
+                'message' => 'please login to your account'
+            ];
+            return $this->generateResponseData($data);
+        }
+        
         $em = $this->getDoctrine()->getManager();
         
         $companies = $em->getRepository(self::COMPANY_REPO)->getCompanyByName($companyName);

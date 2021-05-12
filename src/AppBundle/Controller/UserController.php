@@ -120,12 +120,21 @@ class UserController extends DefaultController
 
     /**
      * reset password
-     * @Rest\Post("/users/{userId}/password/reset", name="user_email_verify")
+     * @Rest\Post("/users/{userId}/password/reset", name="user_password_reset")
      * @param Request $request
      * @return View
      */
     public function resetPassword(Request $request, $userId)
     {
+        if(!$this->getAuthorization()){
+            $data = [
+                'code' => 400,
+                'status' => 'error',
+                'message' => 'please login to your account'
+            ];
+            return $this->generateResponseData($data);
+        }
+
         $postdata = $request->request->all();
 
         $em = $this->getDoctrine()->getManager();
@@ -152,6 +161,40 @@ class UserController extends DefaultController
             'status' => $status,
             'message' => $message
         ];
+
+        return $this->generateResponseData($data);
+    }
+
+    /**
+     * login
+     * @Rest\Post("/users/login", name="user_login")
+     * @param Request $request
+     * @return View
+     */
+    public function login(Request $request)
+    {
+        $postdata = $request->request->all();
+
+        $em = $this->getDoctrine()->getManager();
+        $existUser = $em->getRepository(self::USER_REPO)->findOneBy(['username'=>$postdata['username'], 'password'=>$this->encrypt($postdata['password'])]);
+        $currentDateTime = new \DateTime();
+
+        if($existUser){
+            $existUser->setToken($this->encrypt($currentDateTime->format('Y-m-d H:i:s')));
+            $em->persist($existUser);
+            $em->flush();
+            $data = [
+                'code' => 200,
+                'status' => 'success',
+                'token' => $existUser->getToken()
+            ]; 
+        }else{
+            $data = [
+                'code' => 404,
+                'status' => 'error',
+                'message' => 'username or password false'
+            ]; 
+        }
 
         return $this->generateResponseData($data);
     }

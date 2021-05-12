@@ -24,6 +24,15 @@ class FavouriteCompanyController extends DefaultController
      */
     public function findfavoriteCompanyUserId(Request $request, $userId)
     {
+        if(!$this->getAuthorization()){
+            $data = [
+                'code' => 400,
+                'status' => 'error',
+                'message' => 'please login to your account'
+            ];
+            return $this->generateResponseData($data);
+        }
+        
         $em = $this->getDoctrine()->getManager();
         
         $companies = $em->getRepository(self::FAVOURITE_COMPANY_REPO)->findBy(['userId'=>$userId, 'deletedAt'=>NULL]);
@@ -55,6 +64,15 @@ class FavouriteCompanyController extends DefaultController
      */
     public function setCompanyAsFavourite(Request $request, $userId, $companyId)
     {
+        if(!$this->getAuthorization()){
+            $data = [
+                'code' => 400,
+                'status' => 'error',
+                'message' => 'please login to your account'
+            ];
+            return $this->generateResponseData($data);
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $user = $em->getRepository(self::USER_REPO)->find($userId);
@@ -84,6 +102,15 @@ class FavouriteCompanyController extends DefaultController
      */
     public function setCompanyAsUnfavourite(Request $request, $id)
     {
+        if(!$this->getAuthorization()){
+            $data = [
+                'code' => 400,
+                'status' => 'error',
+                'message' => 'please login to your account'
+            ];
+            return $this->generateResponseData($data);
+        }
+        
         $em = $this->getDoctrine()->getManager();
 
         $favouriteCompany = $em->getRepository(self::FAVOURITE_COMPANY_REPO)->find($id);

@@ -1,69 +1,181 @@
-Symfony Standard Edition
+Lead Book APi
 ========================
-
-Welcome to the Symfony Standard Edition - a fully-functional Symfony
-application that you can use as the skeleton for your new applications.
-
-For details on how to download and get started with Symfony, see the
-[Installation][1] chapter of the Symfony Documentation.
 
 What's inside?
 --------------
 
-The Symfony Standard Edition is configured with the following defaults:
+First Config:
 
-  * An AppBundle you can use to start coding;
+  * composer install
 
-  * Twig as the only configured template engine;
+  * create database with this script :
+    CREATE DATABASE `leadbook_test` /*!40100 DEFAULT CHARACTER SET latin1 */;
+    
+    -- leadbook_test.users definition
 
-  * Doctrine ORM/DBAL;
+    CREATE TABLE `users` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `username` varchar(10) NOT NULL,
+      `password` varchar(50) NOT NULL,
+      `email` varchar(100) NOT NULL,
+      `phone_number` varchar(15) DEFAULT NULL,
+      `created_at` datetime DEFAULT NULL,
+      `updated_at` datetime DEFAULT NULL,
+      `deleted_at` datetime DEFAULT NULL,
+      `email_verified` tinyint(1) DEFAULT '0',
+      `token` varchar(100) DEFAULT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=latin1;
 
-  * Swiftmailer;
+    -- leadbook_test.companies definition
 
-  * Annotations enabled for everything.
+    CREATE TABLE `companies` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `name` varchar(25) NOT NULL,
+      `address` varchar(100) NOT NULL,
+      `phone_number` varchar(15) DEFAULT NULL,
+      `created_at` datetime DEFAULT NULL,
+      `updated_at` datetime DEFAULT NULL,
+      `deleted_at` datetime DEFAULT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
-It comes pre-configured with the following bundles:
+    -- leadbook_test.favourite_companies definition
 
-  * **FrameworkBundle** - The core Symfony framework bundle
+    CREATE TABLE `favourite_companies` (
+      `id` int(11) NOT NULL AUTO_INCREMENT,
+      `user_id` int(11) NOT NULL,
+      `company_id` int(11) NOT NULL,
+      `created_at` datetime DEFAULT NULL,
+      `updated_at` datetime DEFAULT NULL,
+      `deleted_at` datetime DEFAULT NULL,
+      PRIMARY KEY (`id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 
-  * [**SensioFrameworkExtraBundle**][6] - Adds several enhancements, including
-    template and routing annotation capability
+    -- leadbook_test.users_token definition
 
-  * [**DoctrineBundle**][7] - Adds support for the Doctrine ORM
+Sample Usage:
 
-  * [**TwigBundle**][8] - Adds support for the Twig templating engine
+  * REGISTER
+    var form = new FormData();
+    form.append("username", "samid");
+    form.append("password", "samid2304");
+    form.append("phone_number", "98123123123");
+    form.append("email", "dimas.p.andrianto@gmail.com");
 
-  * [**SecurityBundle**][9] - Adds security by integrating Symfony's security
-    component
+    var settings = {
+      "url": "http://local.leadbook.devel:8081/register",
+      "method": "POST",
+      "timeout": 0,
+      "processData": false,
+      "mimeType": "multipart/form-data",
+      "contentType": false,
+      "data": form
+    };
 
-  * [**SwiftmailerBundle**][10] - Adds support for Swiftmailer, a library for
-    sending emails
+    $.ajax(settings).done(function (response) {
+      console.log(response);
+    });
 
-  * [**MonologBundle**][11] - Adds support for Monolog, a logging library
+  * LOGIN
 
-  * **WebProfilerBundle** (in dev/test env) - Adds profiling functionality and
-    the web debug toolbar
+  * EMAIL VERIFYING
+    var form = new FormData();
+    form.append("username", "samid");
+    form.append("password", "samid2304");
+    form.append("phone_number", "98123123123");
+    form.append("email", "dimas.p.andrianto@gmail.com");
 
-  * **SensioDistributionBundle** (in dev/test env) - Adds functionality for
-    configuring and working with Symfony distributions
+    var settings = {
+      "url": "http://local.leadbook.devel:8081/user/8wV8hTO80zh+N9WruW8ASST6D4YqokXWKC9p/verify",
+      "method": "POST",
+      "timeout": 0,
+      "processData": false,
+      "mimeType": "multipart/form-data",
+      "contentType": false,
+      "data": form
+    };
 
-  * [**SensioGeneratorBundle**][13] (in dev/test env) - Adds code generation
-    capabilities
+    $.ajax(settings).done(function (response) {
+      console.log(response);
+    });
 
-  * **DebugBundle** (in dev/test env) - Adds Debug and VarDumper component
-    integration
+  * RESET PASSWORD
+    var form = new FormData();
+    form.append("old_password", "samid2304");
+    form.append("new_password", "samid2305");
 
-All libraries and bundles included in the Symfony Standard Edition are
-released under the MIT or BSD license.
+    var settings = {
+      "url": "http://local.leadbook.devel:8081/user/20/password/reset",
+      "method": "POST",
+      "timeout": 0,
+      "processData": false,
+      "mimeType": "multipart/form-data",
+      "contentType": false,
+      "data": form
+    };
 
-Enjoy!
+    $.ajax(settings).done(function (response) {
+      console.log(response);
+    });
 
-[1]:  https://symfony.com/doc/3.2/setup.html
-[6]:  https://symfony.com/doc/current/bundles/SensioFrameworkExtraBundle/index.html
-[7]:  https://symfony.com/doc/3.2/doctrine.html
-[8]:  https://symfony.com/doc/3.2/templating.html
-[9]:  https://symfony.com/doc/3.2/security.html
-[10]: https://symfony.com/doc/3.2/email.html
-[11]: https://symfony.com/doc/3.2/logging.html
-[12]: https://symfony.com/doc/3.2/assetic/asset_management.html
-[13]: https://symfony.com/doc/current/bundles/SensioGeneratorBundle/index.html
+  * SEARCH BY COMPANY NAME
+    var settings = {
+      "url": "http://local.leadbook.devel:8081/companies/tech/find",
+      "method": "GET",
+      "timeout": 0,
+      "processData": false,
+      "mimeType": "multipart/form-data",
+      "contentType": false,
+      "data": form
+    };
+
+    $.ajax(settings).done(function (response) {
+      console.log(response);
+    });
+
+  * MARK AS FAVOURITE
+    var settings = {
+      "url": "http://local.leadbook.devel:8081/favouritecompanies/20users/2/companies/favourite",
+      "method": "POST",
+      "timeout": 0,
+      "processData": false,
+      "mimeType": "multipart/form-data",
+      "contentType": false,
+      "data": form
+    };
+
+    $.ajax(settings).done(function (response) {
+      console.log(response);
+    });
+
+  * UNMARK THE FAVOURITE
+    var settings = {
+      "url": "http://local.leadbook.devel:8081/favouritecompanies/3/unfavourite",
+      "method": "POST",
+      "timeout": 0,
+      "processData": false,
+      "mimeType": "multipart/form-data",
+      "contentType": false,
+      "data": form
+    };
+
+    $.ajax(settings).done(function (response) {
+      console.log(response);
+    });
+
+  * LIST FAVOURITE COMPANIES
+    var settings = {
+      "url": "http://local.leadbook.devel:8081/favouritecompanies/20/find",
+      "method": "GET",
+      "timeout": 0,
+      "processData": false,
+      "mimeType": "multipart/form-data",
+      "contentType": false,
+      "data": form
+    };
+
+    $.ajax(settings).done(function (response) {
+      console.log(response);
+    });
+  
