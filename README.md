@@ -59,10 +59,10 @@ Sample Usage:
   -api documentation https://documenter.getpostman.com/view/4677413/TzRUC83a
 
 FrontEnd URL:
-  -url/registers
-  -url/login
-  -url/company
-  -url/favouritecompany
-  -url/reset
+  * -url/registers
+  * -url/login
+  * -url/company
+  * -url/favouritecompany
+  * -url/reset
 
   
