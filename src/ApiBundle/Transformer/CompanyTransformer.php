@@ -1,5 +1,5 @@
 <?php
-namespace AppBundle\Transformer;
+namespace ApiBundle\Transformer;
 
 use AppBundle\Entity\Company;
 use League\Fractal\TransformerAbstract;

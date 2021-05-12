@@ -1,10 +1,10 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace ApiBundle\Controller;
 
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
-use AppBundle\Transformer\FavouriteCompanyTransformer;
+use ApiBundle\Transformer\FavouriteCompanyTransformer;
 use League\Fractal\Resource\Collection;
 use AppBundle\Entity\FavouriteCompany;
 /**
